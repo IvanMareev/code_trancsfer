@@ -1,1 +1,24 @@
-$_SESSION['form_submitted'] === true
+function hasUserPassedForm($userId, $formId) {
+    global $DB;
+
+    // Пример запроса для проверки
+    $sql = "SELECT COUNT(*) as COUNT 
+            FROM b_form_result 
+            WHERE USER_ID = '" . intval($userId) . "' 
+              AND FORM_ID = '" . intval($formId) . "'";
+
+    $result = $DB->Query($sql);
+    $row = $result->Fetch();
+
+    return $row['COUNT'] > 0; // Возвращает true, если форма уже была отправлена
+}
+
+// Использование функции
+$userId = $USER->GetID(); // Получаем ID текущего пользователя
+$formId = 1; // ID вашей формы
+
+if (hasUserPassedForm($userId, $formId)) {
+    echo "Вы уже заполнили эту форму.";
+} else {
+    echo "Вы можете заполнить форму.";
+}
